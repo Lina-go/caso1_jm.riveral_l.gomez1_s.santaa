@@ -29,11 +29,13 @@ public class ProcesoInicial extends Thread {
             }
             
             BuzonS.recibeProducto(productosIni.remove());
+            notify();
         }
     }
 
     public void run(){
         
+        cargaInicial();
 
     }
 }

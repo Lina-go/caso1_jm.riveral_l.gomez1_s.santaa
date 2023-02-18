@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public abstract class Buzon {
 
-    protected int tamano; //tamaño buzon
+    protected static int tamano; //tamaño buzon
 	protected Queue<String> cola = new LinkedList<String>();
 
     public Buzon(int tamano) {
