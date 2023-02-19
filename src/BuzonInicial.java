@@ -15,8 +15,19 @@ public class BuzonInicial extends Buzon {
 
     @Override
     public synchronized String sacaProducto() {
-        // TODO Auto-generated method stub
-        return null;
+        while(cola.size() ==0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+        }
+        String prod = cola.remove();
+        notify();
+        return prod;
+
     }
 
     

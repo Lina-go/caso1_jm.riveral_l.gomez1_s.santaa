@@ -34,8 +34,9 @@ public class ProcesoInicial extends Thread {
     }
 
     public void run(){
-        
+        System.out.println("Proceso Inicial Iniciado");
         cargaInicial();
+        System.out.println("Proceso Inicial terminado");
 
     }
 }
