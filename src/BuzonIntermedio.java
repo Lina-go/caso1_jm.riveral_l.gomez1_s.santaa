@@ -10,14 +10,29 @@ public class BuzonIntermedio extends Buzon {
 
 
     @Override
-    public void recibeProducto(Producto prod) {
-        // TODO Auto-generated method stub
-        
+    public synchronized void recibeProducto(Producto prod) {
+        while (cola.size() == tamano) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        cola.add(prod.getMsg());
+        notify();
     }
 
     @Override
-    public String sacaProducto() {
-        // TODO Auto-generated method stub
-        return null;
+    public synchronized String sacaProducto() {
+        while (cola.size() == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        String prod = cola.remove();
+        notify();
+        return prod;
     }
 }

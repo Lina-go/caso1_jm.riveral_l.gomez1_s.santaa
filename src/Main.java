@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-
+import java.util.concurrent.CyclicBarrier;
 import Utils.Reporter;
 
 public class Main {
@@ -33,13 +33,14 @@ public class Main {
 
          System.out.println("Capacidad de Buzonez:");
         capacidadB = in.nextInt();
-        System.out.println("Capacidad: " + numProcedimientos);
+        System.out.println("Capacidad: " + capacidadB);
 
         azules=numProcedimientos-1;
         naranjas=1;
+        System.out.println("\nHay "+ azules+ " procesos azules y 1 proceso naranja\n");
 
         //crea productos
-       for (int i = 0; i < numProductos; i++) {
+        for (int i = 0; i < numProductos; i++) {
         Producto newProd = new Producto(i);
         productosCreados.add(newProd);
         
@@ -48,27 +49,36 @@ public class Main {
 
 
         BuzonInicial bInicio= new BuzonInicial(capacidadB);
-        BuzonFinal bFinal = new BuzonFinal();
         BuzonIntermedio bI1= new BuzonIntermedio(capacidadB);
         BuzonIntermedio bI2= new BuzonIntermedio(capacidadB);
         BuzonIntermedio bI3 = new BuzonIntermedio(capacidadB);
+        BuzonFinal bFinal = new BuzonFinal();
         Buzon[] buzones= {bInicio,bI1,bI2,bI3};
         System.out.println("buzones creados exitosamente");
 
+
         ProcesoInicial inicial= new ProcesoInicial(bI1,productosCreados);
+        System.out.print("\nSe inicia el proceso Incial...");
+        inicial.start();
+
+        //try {
+        //    inicial.join();
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
 
         for(int j=0;j<3;j++){
             for(int x=1;x<=azules;x++){
-                ProcesoIntermedio pInter= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1);
+                ProcesoIntermedio pAzul= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1); 
+                pAzul.start();
             }
             ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1);
+            pNaranja.start();
         }
-        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal);
-        
-
+        CyclicBarrier barrera = new CyclicBarrier(numProcedimientos);
+        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal,barrera);
+        finalP.start();
         System.out.println("procesos creados exitosamente");
-
-
 
     }
     
