@@ -20,25 +20,27 @@ public class Main {
 
     public static void main(String args[])
     {
-        // Using Scanner for Getting Input from User
         Scanner in = new Scanner(System.in);
  
+        // Pedimos Productos
         System.out.println("Numero de Productos:");
         numProductos  = in.nextInt();
         System.out.println("Numero de Productos: " + numProductos);
  
+        // Pedimos No. de Procesos
         System.out.println("Numero de Procesos:");
         numProcedimientos = in.nextInt();
         System.out.println("Numero de Procesos: " + numProcedimientos);
 
-         System.out.println("Capacidad de Buzonez:");
+        // Pedimos No. de Capacidad del Buzón
+         System.out.println("Capacidad de Buzones:");
         capacidadB = in.nextInt();
         System.out.println("Capacidad: " + numProcedimientos);
 
         azules=numProcedimientos-1;
         naranjas=1;
 
-        //crea productos
+        //Creamos Productos
        for (int i = 0; i < numProductos; i++) {
         Producto newProd = new Producto(i);
         productosCreados.add(newProd);
@@ -46,27 +48,48 @@ public class Main {
        }
         System.out.println("productos creados exitosamente");
 
-
+        // Creamos Buzones:
+        
+        // Buzon Inicial
         BuzonInicial bInicio= new BuzonInicial(capacidadB);
-        BuzonFinal bFinal = new BuzonFinal();
+        
+        // Buzones Intermedios
         BuzonIntermedio bI1= new BuzonIntermedio(capacidadB);
         BuzonIntermedio bI2= new BuzonIntermedio(capacidadB);
         BuzonIntermedio bI3 = new BuzonIntermedio(capacidadB);
+        
+        // Buzon Final
+        BuzonFinal bFinal = new BuzonFinal();
+        
+        // Lista de Buzones
         Buzon[] buzones= {bInicio,bI1,bI2,bI3};
+        
         System.out.println("buzones creados exitosamente");
-
-        ProcesoInicial inicial= new ProcesoInicial(bI1,productosCreados);
-
-        for(int j=0;j<3;j++){
-            for(int x=1;x<=azules;x++){
-                ProcesoIntermedio pInter= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1);
-            }
-            ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1);
-        }
-        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal);
+        // Creamos Proceso Inicial
+        ProcesoInicial inicial= new ProcesoInicial(bI1,productosCreados, buzones);
+        inicial.start();
+        
+        // Productos Obtenidos de la Etapa #1
+        Queue<Producto> ProductosObtenidos = bInicio.listaDeProductosObtenidos();
+        inicial.setProductosObtenidos(ProductosObtenidos);
+        
+        // Productos Obtenidos de la Etapa #2
+        Queue<Producto> ProductosObtenidos1 = bI1.listaDeProductosObtenidos();
+        Queue<Producto> ProductosObtenidos2 = bI2.listaDeProductosObtenidos();
+        Queue<Producto> ProductosObtenidos3 = bI3.listaDeProductosObtenidos();
+        // Productos Obtenidos de la Etapa #3
+        Queue<Producto> ProductosObtenidos4 = bFinal.listaDeProductosObtenidos();
         
 
-        System.out.println("procesos creados exitosamente");
+        
+        
+        // Creamos Proceso Final
+        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal);
+        finalP.start();
+        
+        System.out.println("Productos procesados creados exitosamente");
+
+        
 
 
 

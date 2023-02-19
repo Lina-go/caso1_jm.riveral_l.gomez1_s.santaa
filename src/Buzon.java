@@ -22,7 +22,7 @@ public abstract class Buzon {
 	/**
 	 * Saca el mensaje en el tope de la cola y lo retorna
 	 */
-	public abstract String sacaProducto();
+	public abstract void sacaProducto(Producto prod);
 
 	/**
 	 * Retorna la capacidad actual del buzón.

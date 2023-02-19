@@ -1,5 +1,9 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BuzonIntermedio extends Buzon {
-    
+	private static Queue<Producto> ListaDeEspera = new LinkedList<Producto>();
+	private static Queue<Producto> ProductosDespachados = new LinkedList<Producto>();
     public BuzonIntermedio(int tamano) {
         super(tamano);
         //TODO Auto-generated constructor stub
@@ -11,13 +15,19 @@ public class BuzonIntermedio extends Buzon {
 
     @Override
     public void recibeProducto(Producto prod) {
-        // TODO Auto-generated method stub
+    	ListaDeEspera.add(prod);
+    	System.out.println("Se ha recibido un nuevo producto al Buzon I1");
         
     }
 
     @Override
-    public String sacaProducto() {
-        // TODO Auto-generated method stub
-        return null;
+    public void sacaProducto(Producto prod) {
+        ListaDeEspera.remove(prod);
+
+    }
+    
+    public synchronized Queue<Producto> listaDeProductosObtenidos() {
+    return ProductosDespachados;
+
     }
 }
