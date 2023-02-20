@@ -22,7 +22,8 @@ public class Main {
     {
         // Using Scanner for Getting Input from User
         Scanner in = new Scanner(System.in);
- 
+        
+        //Consola: Se le piden al usuario params(productos,procesos,capacidad)
         System.out.println("Numero de Productos:");
         numProductos  = in.nextInt();
         System.out.println("Numero de Productos: " + numProductos);
@@ -31,7 +32,7 @@ public class Main {
         numProcedimientos = in.nextInt();
         System.out.println("Numero de Procesos: " + numProcedimientos);
 
-         System.out.println("Capacidad de Buzonez:");
+        System.out.println("Capacidad de Buzonez:");
         capacidadB = in.nextInt();
         System.out.println("Capacidad: " + capacidadB);
 
@@ -54,6 +55,9 @@ public class Main {
         BuzonIntermedio bI3 = new BuzonIntermedio(capacidadB);
         BuzonFinal bFinal = new BuzonFinal();
         Buzon[] buzones= {bInicio,bI1,bI2,bI3};
+
+        ProcesoFinal.setBarrier(new CyclicBarrier(numProcedimientos+1));
+
         System.out.println("buzones creados exitosamente");
 
 
@@ -66,6 +70,7 @@ public class Main {
         //} catch (InterruptedException e) {
         //    e.printStackTrace();
         //}
+        
 
         for(int j=0;j<3;j++){
             for(int x=1;x<=azules;x++){
@@ -75,10 +80,14 @@ public class Main {
             ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1);
             pNaranja.start();
         }
-        CyclicBarrier barrera = new CyclicBarrier(numProcedimientos);
-        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal,barrera);
+        try {
+            ProcesoFinal.getBarrier().await();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal);
         finalP.start();
-        System.out.println("procesos creados exitosamente");
+        System.out.println("procesos finalizados exitosamente");
 
     }
     

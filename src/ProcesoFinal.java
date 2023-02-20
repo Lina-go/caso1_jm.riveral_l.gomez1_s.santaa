@@ -5,22 +5,21 @@ public class ProcesoFinal extends Thread{
     private  Buzon entrada;
     private int nivel;
     private int tipo;
-    private static CyclicBarrier barrier;
-public ProcesoFinal(Buzon buzonE,Buzon buzonS,CyclicBarrier barrera){
+    private static CyclicBarrier barrera;
+public ProcesoFinal(Buzon buzonE,Buzon buzonS){
 
     this.salida=buzonS;
     this.entrada=buzonE;
-    this.barrier=barrera;
    
 }
-public synchronized void esperaProductos(){
-    try {
-        barrier.await();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+
 public void run(){
 
+}
+public static CyclicBarrier getBarrier() {
+    return barrera;
+}
+public static void setBarrier(CyclicBarrier barrera) {
+    ProcesoFinal.barrera = barrera;
 }
 }

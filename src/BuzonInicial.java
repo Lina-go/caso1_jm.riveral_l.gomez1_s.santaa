@@ -9,7 +9,7 @@ public class BuzonInicial extends Buzon {
 
     @Override
     public synchronized void recibeProducto(Producto prod) {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("No se puede poner producto en el buzon inicial");
         
     }
 

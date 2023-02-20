@@ -15,7 +15,7 @@ public class ProcesoInicial extends Thread {
         this.productosIni=productosInicio;
 
     }
-
+    
     public synchronized void cargaInicial(){
 
         while(productosIni.size()!=0){

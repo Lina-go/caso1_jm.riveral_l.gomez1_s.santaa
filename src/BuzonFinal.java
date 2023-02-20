@@ -17,7 +17,7 @@ private ArrayList<Producto> listaFin;
     }
     @Override
     public String sacaProducto() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("No se puede sacar productos del buzón final!!");
+        
     }
 }
