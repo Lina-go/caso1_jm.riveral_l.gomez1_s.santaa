@@ -5,31 +5,39 @@ import java.util.concurrent.CyclicBarrier;
 public class ProcesoFinal extends Thread{
     private Buzon salida;
     private  Buzon entrada;
-    private int nivel;
-    private int tipo;
-    private Queue<Producto> productosIni = new LinkedList<Producto>();
+    
     private static CyclicBarrier barrera;
     public static int contador;
-    private int numProductos;
+    private int finalizados;
+
     
-public ProcesoFinal(Buzon buzonE,Buzon buzonS){
-    this.salida=buzonS;
+public ProcesoFinal(Buzon buzonE, int numeroProcesos){
     this.entrada=buzonE;
+    this.finalizados=numeroProcesos;
+
 }
 
 public void run(){
     
-    while (true) {
-        if (entrada.getOcupacion() == 0) {
-            System.out.println("Se acabaron los productos");
-            break;
+        boolean terminar = false;
+        while(!terminar) {
+            Main.rep.rRetriveAttempt("final");
+            while(entrada.getOcupacion() == 0) {
+                Main.rep.rBuzonFinalVacio();
+                this.yield();
+            }
+            Producto prod = entrada.sacaProductoA();
+            finalizados--;
+            System.out.println("El proceso final recibió el mensaje: " + prod.getMsg());
+            if(finalizados == 0 ) {
+                if(finalizados == 3) {
+                    terminar = true;
+                    Main.rep.report("El proceso final recibió el tercer mensaje 'FIN'. Finaliza su ejecución");;
+                }
+            }
         }
-        Producto prod = entrada.sacaProducto();
-        System.out.println("Proceso " + prod.getMsg() + " recibio producto: "+prod.getMsg());
-        salida.recibeProducto(prod);
-        System.out.println("Proceso Final: " + prod.getId());
     }
-}
+
 public static CyclicBarrier getBarrier() {
     return barrera;
 }

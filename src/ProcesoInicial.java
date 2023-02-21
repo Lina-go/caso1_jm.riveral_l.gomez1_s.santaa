@@ -7,36 +7,28 @@ import java.util.Queue;
  */
 public class ProcesoInicial extends Thread {
 
-    private Buzon BuzonS;
+    private Buzon buzonS;
     private Queue<Producto> productosIni = new LinkedList<Producto>();
-    
-    public ProcesoInicial(Buzon BuzonSalida, Queue<Producto> productosInicio){
-        this.BuzonS=BuzonSalida;
-        this.productosIni=productosInicio;
+
+    public ProcesoInicial(Buzon BuzonSalida, Queue<Producto> productosInicio) {
+        this.buzonS = BuzonSalida;
+        this.productosIni = productosInicio;
 
     }
-    
-    public synchronized void cargaInicial(){
 
-        while(productosIni.size()!=0){
-            if(BuzonS.getCapacidad()==0){
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+    public void run() {
+        for (int i = 0; i < productosIni.size(); i++) {
+            Producto x = productosIni.remove();
+
+            while (buzonS.getCapacidad() == 0) {
+
+                Main.rep.rBuzonLleno("inicial", x.getMsg());
+                ProcesoInicial.yield();
             }
-            
-            BuzonS.recibeProducto(productosIni.remove());
-            notify();
+            buzonS.recibeProductoA(x);
+            buzonS.setContador();
+
         }
-    }
-
-    public void run(){
-        System.out.println("Proceso Inicial Iniciado");
-        cargaInicial();
-        System.out.println("Proceso Inicial terminado");
-
+        Main.rep.report("El proceo inicial envió todos los mensajes. Finaliza su ejecución");
     }
 }

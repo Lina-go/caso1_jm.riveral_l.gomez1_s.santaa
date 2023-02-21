@@ -8,27 +8,42 @@ public class BuzonInicial extends Buzon {
     }
 
     @Override
-    public synchronized void recibeProducto(Producto prod) {
-        throw new UnsupportedOperationException("No se puede poner producto en el buzon inicial");
-        
-    }
+    public synchronized void recibeProductoA(Producto prod) {
+        if (cola.size() == tamano) {
+            System.out.println("Se intentó agregar un producto cuando el buzon inicial estaba lleno");
+        }
+        cola.add(prod);
+        Main.rep.rprodAdded("inicial", prod.getMsg());
+        notify();
+        }
 
     @Override
-    public synchronized Producto sacaProducto() {
-        while(cola.size() ==0){
+    public synchronized Producto sacaProductoA() {
+        while(cola.size() == 0) {
+            Main.rep.rBuzonVacio("inicial");
             try {
                 wait();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
         }
-        Producto prod = cola.remove();
-        notify();
-        return prod;
-
+        Producto x = cola.remove();
+        Main.rep.rProdRemoved("inicial", x.getMsg());
+        return x;
     }
+
+    @Override
+    public void recibeProductoN(Producto prod) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'recibeProductoN'");
+    }
+
+    @Override
+    public Producto sacaProductoN() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sacaProductoN'");
+    }
+    
 
     
     

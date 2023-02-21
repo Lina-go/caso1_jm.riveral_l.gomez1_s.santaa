@@ -12,19 +12,23 @@ public abstract class Buzon {
 
     public Buzon(int tamano) {
 		this.tamano = tamano;
+		this.contador=0;
 	}
 
 
     /**
 	 * Añade un mensaje a la cola de mensajes del Buzón 
 	 */
-	public abstract void recibeProducto(Producto prod);
+	public abstract void recibeProductoA(Producto prod);
 	
 	/**
 	 * Saca el mensaje en el tope de la cola y lo retorna
 	 */
-	public abstract Producto sacaProducto();
+	public abstract Producto sacaProductoA();
 
+	public abstract void recibeProductoN(Producto prod);
+	
+	public abstract Producto sacaProductoN();
 	/**
 	 * Retorna la capacidad actual del buzón.
 	 */
@@ -34,6 +38,9 @@ public abstract class Buzon {
 	public synchronized int getContador() {
 		return contador;
 	}
+	public synchronized void setContador() {
+		contador+=1;
+	}
 
 	/**
 	 * Retorna la cantidad actual de mensajes en la cola
@@ -41,8 +48,9 @@ public abstract class Buzon {
 	public synchronized int getOcupacion() {
 		return cola.size();
 	}
-	public void setContador(int i) {
-		ProcesoFinal.contador+=i;
-	}
+
+
+	
+
 	
 }

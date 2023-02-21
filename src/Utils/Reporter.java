@@ -33,31 +33,31 @@ public class Reporter {
     }
 
     public synchronized void rSendAttempt(String id, String msg) {
-        report("El proceso " + id + " intentó enviar el mensaje " + msg);
+        report("El proceso " + id + " intentó enviar el producto " + msg);
     };
 
-    public synchronized void rMessageAdded(String id, String msg) {
-        report("El buzón " + id + " recibió el mensaje " + msg);
+    public synchronized void rprodAdded(String i, String msg) {
+        report("El buzón " + i + " recibió el producto " + msg);
     };
 
     public synchronized void rRetriveAttempt(String id) {
-        report("El proceso " + id + " intentó recuperar un mensaje");
+        report("El proceso " + id + " intentó recuperar un producto");
     };
 
-    public synchronized void rMessageRemoved(String id, String msg) {
-        report("El buzón " + id + " entregó el mensaje " + msg);
+    public synchronized void rProdRemoved(String id, String msg) {
+        report("El buzón " + id + " entregó el producto " + msg);
     };
 
-    public synchronized void rBuzonLleno(String id, String msg) {
-        report("El buzón " + id + " está lleno. Inicia espera para añadir " + msg);
+    public synchronized void rBuzonLleno(String i, String msg) {
+        report("El buzón " + i + " está lleno. Inicia espera para añadir " + msg);
     }
 
     public synchronized void rBuzonVacio(String id) {
-        report("El buzón " + id + " está vacio. Inicia espera para sacar el siguiente mensaje");
+        report("El buzón " + id + " está vacio. Inicia espera para sacar el siguiente producto");
     }
 
     public synchronized void rEndOfExecution(String id) {
-        report("El proceso " + id + " recibió el mensaje 'FIN'. Finaliza su ejecución");
+        report("El proceso " + id + " no recibe mas productos. Finaliza su ejecución");
     }
 
     public synchronized void rBuzonFinalVacio() {

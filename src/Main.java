@@ -17,7 +17,7 @@ public class Main {
     private static Queue<Producto> productosTransformados = new LinkedList<Producto>();
     private static int azules=0;
     private static int naranjas=0;
-
+	public static final Reporter rep = new Reporter("ExecReport " + LocalDateTime.now().toString());
 
     public static void main(String args[])
     {
@@ -39,7 +39,7 @@ public class Main {
 
         azules=numProcedimientos-1;
         naranjas=1;
-        System.out.println("\nHay "+ azules+ " procesos azules y 1 proceso naranja\n");
+        System.out.println("\nHay "+ azules+ " procesos azules y 1 proceso naranja por nivel\n");
 
         //crea productos
         for (int i = 0; i < numProductos; i++) {
@@ -50,9 +50,9 @@ public class Main {
 
 
         BuzonInicial bInicio= new BuzonInicial(capacidadB);
-        BuzonIntermedio bI1= new BuzonIntermedio(capacidadB);
-        BuzonIntermedio bI2= new BuzonIntermedio(capacidadB);
-        BuzonIntermedio bI3 = new BuzonIntermedio(capacidadB);
+        BuzonIntermedio bI1= new BuzonIntermedio(capacidadB, 1);
+        BuzonIntermedio bI2= new BuzonIntermedio(capacidadB,2);
+        BuzonIntermedio bI3 = new BuzonIntermedio(capacidadB,3);
         BuzonFinal bFinal = new BuzonFinal();
         Buzon[] buzones= {bInicio,bI1,bI2,bI3};
 
@@ -61,7 +61,7 @@ public class Main {
         System.out.println("buzones creados exitosamente");
 
 
-        ProcesoInicial inicial= new ProcesoInicial(bI1,productosCreados);
+        ProcesoInicial inicial= new ProcesoInicial(bInicio,productosCreados);
         System.out.print("\nSe inicia el proceso Incial...");
         inicial.start();
         
@@ -69,20 +69,24 @@ public class Main {
             for(int x=0;x<azules;x++){
                 ProcesoIntermedio pAzul= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1,numProductos); 
                 pAzul.start();
+                //System.out.println("Proceso " + " AZUL " + " iniciado en nivel: "+(j+1));
+
             }
             ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1,numProductos);
             pNaranja.start();
             
+           //System.out.println("Proceso " + " Naranja " + " iniciado en nivel: "+(j+1));
         }
+
         try {
             ProcesoFinal.getBarrier().await();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ProcesoFinal finalP = new ProcesoFinal(bI3, bFinal);
+        ProcesoFinal finalP = new ProcesoFinal(bI3,numProcedimientos);
         finalP.start();
-        System.out.println("procesos finalizados exitosamente");
-
+        rep.report("Finalizó la ejecución del proceso final. Fin de la aplicación");
+        rep.close();
     }
     
 }

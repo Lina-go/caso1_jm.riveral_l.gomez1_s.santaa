@@ -1,13 +1,20 @@
 public class BuzonIntermedio extends Buzon {
-    
-    public BuzonIntermedio(int tamano) {
+    private int nivel;
+    public BuzonIntermedio(int tamano, int level) {
         super(tamano);
-        //TODO Auto-generated constructor stub
+        this.nivel=level;
     }
 
+    /**
+     * Añade un mensaje a la cola de mensajes del Buzón final.
+     * Si el buzón no tiene espacio, hace Wait().
+     * Cuando añade el mensaje hace Notify para para despertar
+     * a consumidores en espera.
+     */
     @Override
-    public synchronized void recibeProducto(Producto prod) {
-        while (cola.size() == tamano) {
+    public synchronized void recibeProductoA(Producto prod) {
+        while(cola.size() == tamano) {
+            Main.rep.rBuzonLleno(getId()+"", prod.getMsg());
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -15,11 +22,22 @@ public class BuzonIntermedio extends Buzon {
             }
         }
         cola.add(prod);
+        Main.rep.rprodAdded(getId(), prod.getMsg());
         notify();
     }
 
+    private String getId() {
+        return "Intermedio -" + nivel;
+    }
+
+    /**
+	 * Saca el producto en el tope de la cola y lo retorna
+     * Si la cola no tiene mensajes hace wait().
+     * Cuando saca el mensaje hace notify para despertar
+     * a productores en espera.
+	 */
     @Override
-    public synchronized Producto sacaProducto() {
+    public synchronized Producto sacaProductoA() {
         while (cola.size() == 0) {
             try {
                 wait();
@@ -31,4 +49,17 @@ public class BuzonIntermedio extends Buzon {
         notify();
         return prod;
     }
+
+    @Override
+    public void recibeProductoN(Producto prod) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'recibeProductoN'");
+    }
+
+    @Override
+    public Producto sacaProductoN() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sacaProductoN'");
+    }
+    
 }
