@@ -14,7 +14,7 @@ public class BuzonInicial extends Buzon {
     }
 
     @Override
-    public synchronized String sacaProducto() {
+    public synchronized Producto sacaProducto() {
         while(cola.size() ==0){
             try {
                 wait();
@@ -24,7 +24,7 @@ public class BuzonInicial extends Buzon {
             }
             
         }
-        String prod = cola.remove();
+        Producto prod = cola.remove();
         notify();
         return prod;
 

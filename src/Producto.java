@@ -2,10 +2,12 @@ public class Producto {
 
     private int id;
     private String msg;
+    private boolean color;
 
-    public Producto(int pId) {
+    public Producto(int pId,boolean col) {
         this.id=pId;
         this.msg=pId+"";
+        this.color=col;
     }
     
     public int getId() {
@@ -14,6 +16,10 @@ public class Producto {
     }
     public String getMsg() {
         return this.msg;
+        
+    }
+    public Boolean getTipo() {
+        return this.color;
         
     }
 

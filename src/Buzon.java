@@ -7,7 +7,7 @@ import java.util.Queue;
 public abstract class Buzon {
 
     protected static int tamano; //tamaño buzon
-	protected Queue<String> cola = new LinkedList<String>();
+	protected Queue<Producto> cola = new LinkedList<Producto>();
 
     public Buzon(int tamano) {
 		this.tamano = tamano;
@@ -22,7 +22,7 @@ public abstract class Buzon {
 	/**
 	 * Saca el mensaje en el tope de la cola y lo retorna
 	 */
-	public abstract String sacaProducto();
+	public abstract Producto sacaProducto();
 
 	/**
 	 * Retorna la capacidad actual del buzón.

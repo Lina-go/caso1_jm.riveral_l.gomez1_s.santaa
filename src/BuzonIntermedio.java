@@ -5,10 +5,6 @@ public class BuzonIntermedio extends Buzon {
         //TODO Auto-generated constructor stub
     }
 
-    
-
-
-
     @Override
     public synchronized void recibeProducto(Producto prod) {
         while (cola.size() == tamano) {
@@ -18,12 +14,12 @@ public class BuzonIntermedio extends Buzon {
                 e.printStackTrace();
             }
         }
-        cola.add(prod.getMsg());
+        cola.add(prod);
         notify();
     }
 
     @Override
-    public synchronized String sacaProducto() {
+    public synchronized Producto sacaProducto() {
         while (cola.size() == 0) {
             try {
                 wait();
@@ -31,7 +27,7 @@ public class BuzonIntermedio extends Buzon {
                 e.printStackTrace();
             }
         }
-        String prod = cola.remove();
+        Producto prod = cola.remove();
         notify();
         return prod;
     }

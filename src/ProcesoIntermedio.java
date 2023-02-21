@@ -8,9 +8,12 @@ private Buzon salida;
 private  Buzon entrada;
 private int nivel;
 private String tipo;
+private int numProductos;
 private Queue<Producto> productosTransformados = new LinkedList<Producto>();
-public ProcesoIntermedio(Buzon buzonE,Buzon buzonS,String ntipo,int pnivel){
+private static int h=0;
 
+public ProcesoIntermedio(Buzon buzonE,Buzon buzonS,String ntipo,int pnivel,int numProducto){
+    this.numProductos = numProducto;
     this.salida=buzonS;
     this.entrada=buzonE;
     this.tipo=ntipo;
@@ -18,32 +21,43 @@ public ProcesoIntermedio(Buzon buzonE,Buzon buzonS,String ntipo,int pnivel){
 }
 
 
-
-
 public void run(){
     System.out.println("Proceso " + tipo + " iniciado en nivel " + nivel);
-    System.out.println(productosTransformados.size());
-    while(productosTransformados.size()!=0){
+    //System.out.println(productosTransformados.size());
     
-        if(tipo.equals("NARANJA")){
-            System.out.println("Proceso " + tipo + " iniciado en nivelooos: "+nivel);
+    
+    while(h<numProductos){
+        
+        Producto prod = entrada.sacaProducto();
+        if(tipo.equals("NARANJA") && prod.getTipo()==true){
+            System.out.println("Proceso " + tipo + " iniciado en nivel: "+nivel);
             while(entrada.getOcupacion() == 0) {
-                Thread.yield();
+                //Thread.yield();
             }
-            String prod = entrada.sacaProducto();
+            
+            productosTransformados.add(prod);
+            try {
+                productosTransformados.wait(); //se pausa el hilo azul
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             try {
                 sleep(ThreadLocalRandom.current().nextInt(50, 501));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             while(salida.getCapacidad()==0){
-                Thread.yield();
+                //Thread.yield();
             }
             salida.recibeProducto(productosTransformados.remove());
+            notify(); // se vuelve a llamar a todos los hilos
+            
             System.out.println("Proceso " + tipo + " terminado en nivel: "+nivel);
         }
-        else if (tipo.equals("AZUL")) {
-            String prod = entrada.sacaProducto();
+        else if (tipo.equals("AZUL")&& prod.getTipo()==false) {
+            
+            productosTransformados.add(prod);
             try {
                 sleep(ThreadLocalRandom.current().nextInt(50, 501));
             } catch (InterruptedException e) {
@@ -54,7 +68,9 @@ public void run(){
             salida.recibeProducto(productosTransformados.remove());
             System.out.println("Proceso " + tipo + " terminado en nivel: "+nivel);
         }
+        h++;
     }
+
 
 }
 

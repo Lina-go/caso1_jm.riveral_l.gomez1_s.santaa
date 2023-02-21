@@ -14,6 +14,7 @@ public class Main {
     private static int numProcedimientos=0;
     private static int capacidadB =0;
     private static Queue<Producto> productosCreados = new LinkedList<Producto>();
+    private static Queue<Producto> productosTransformados = new LinkedList<Producto>();
     private static int azules=0;
     private static int naranjas=0;
 
@@ -32,7 +33,7 @@ public class Main {
         numProcedimientos = in.nextInt();
         System.out.println("Numero de Procesos: " + numProcedimientos);
 
-        System.out.println("Capacidad de Buzonez:");
+        System.out.println("Capacidad de Buzones:");
         capacidadB = in.nextInt();
         System.out.println("Capacidad: " + capacidadB);
 
@@ -42,9 +43,15 @@ public class Main {
 
         //crea productos
         for (int i = 0; i < numProductos; i++) {
-        Producto newProd = new Producto(i);
-        productosCreados.add(newProd);
-        
+            if (i%2==0){
+                Producto newProd = new Producto(i,true);
+                productosCreados.add(newProd);
+            }
+            else{
+                
+                Producto newProd = new Producto(i,false);
+                productosCreados.add(newProd);
+            }
        }
         System.out.println("productos creados exitosamente");
 
@@ -64,21 +71,15 @@ public class Main {
         ProcesoInicial inicial= new ProcesoInicial(bI1,productosCreados);
         System.out.print("\nSe inicia el proceso Incial...");
         inicial.start();
-
-        //try {
-        //    inicial.join();
-        //} catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //}
         
-
         for(int j=0;j<3;j++){
-            for(int x=1;x<=azules;x++){
-                ProcesoIntermedio pAzul= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1); 
+            for(int x=0;x<azules;x++){
+                ProcesoIntermedio pAzul= new ProcesoIntermedio(buzones[j],buzones[j+1],"AZUL",j+1,numProductos); 
                 pAzul.start();
             }
-            ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1);
+            ProcesoIntermedio pNaranja = new ProcesoIntermedio(buzones[j],buzones[j+1],"NARANJA",j+1,numProductos);
             pNaranja.start();
+            
         }
         try {
             ProcesoFinal.getBarrier().await();

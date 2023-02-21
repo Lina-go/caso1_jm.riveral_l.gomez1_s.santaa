@@ -12,11 +12,10 @@ private ArrayList<Producto> listaFin;
     }
     @Override
     public void recibeProducto(Producto prod) {
-        // TODO Auto-generated method stub
-        
+        cola.add(prod);
     }
     @Override
-    public String sacaProducto() {
+    public Producto sacaProducto() {
         throw new UnsupportedOperationException("No se puede sacar productos del buzón final!!");
         
     }
