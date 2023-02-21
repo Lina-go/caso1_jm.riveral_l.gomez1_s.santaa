@@ -8,6 +8,7 @@ public abstract class Buzon {
 
     protected static int tamano; //tamaño buzon
 	protected Queue<Producto> cola = new LinkedList<Producto>();
+	protected int contador; 
 
     public Buzon(int tamano) {
 		this.tamano = tamano;
@@ -30,12 +31,18 @@ public abstract class Buzon {
 	public synchronized int getCapacidad() {
 		return tamano - cola.size();
 	}
+	public synchronized int getContador() {
+		return contador;
+	}
 
 	/**
 	 * Retorna la cantidad actual de mensajes en la cola
 	 */
 	public synchronized int getOcupacion() {
 		return cola.size();
+	}
+	public void setContador(int i) {
+		ProcesoFinal.contador+=i;
 	}
 	
 }

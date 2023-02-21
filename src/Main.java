@@ -43,15 +43,8 @@ public class Main {
 
         //crea productos
         for (int i = 0; i < numProductos; i++) {
-            if (i%2==0){
-                Producto newProd = new Producto(i,true);
+                Producto newProd = new Producto(i);
                 productosCreados.add(newProd);
-            }
-            else{
-                
-                Producto newProd = new Producto(i,false);
-                productosCreados.add(newProd);
-            }
        }
         System.out.println("productos creados exitosamente");
 

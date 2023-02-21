@@ -9,6 +9,7 @@ public class ProcesoFinal extends Thread{
     private int tipo;
     private Queue<Producto> productosIni = new LinkedList<Producto>();
     private static CyclicBarrier barrera;
+    public static int contador;
     private int numProductos;
     
 public ProcesoFinal(Buzon buzonE,Buzon buzonS){
@@ -25,14 +26,14 @@ public void run(){
         }
         Producto prod = entrada.sacaProducto();
         System.out.println("Proceso " + prod.getMsg() + " recibio producto: "+prod.getMsg());
-        productosIni.add(prod);
+        salida.recibeProducto(prod);
         System.out.println("Proceso Final: " + prod.getId());
     }
 }
 public static CyclicBarrier getBarrier() {
     return barrera;
 }
-public static void setBarrier(CyclicBarrier barrera) {
-    ProcesoFinal.barrera = barrera;
+public static void setBarrier(CyclicBarrier barre) {
+    ProcesoFinal.barrera = barre;
 }
 }

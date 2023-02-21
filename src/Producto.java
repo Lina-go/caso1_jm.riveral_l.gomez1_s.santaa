@@ -4,10 +4,9 @@ public class Producto {
     private String msg;
     private boolean color;
 
-    public Producto(int pId,boolean col) {
+    public Producto(int pId) {
         this.id=pId;
         this.msg=pId+"";
-        this.color=col;
     }
     
     public int getId() {
