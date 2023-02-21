@@ -17,7 +17,17 @@ public ProcesoFinal(Buzon buzonE,Buzon buzonS){
 }
 
 public void run(){
-    Producto prod = entrada.sacaProducto();
+    
+    while (true) {
+        if (entrada.getOcupacion() == 0) {
+            System.out.println("Se acabaron los productos");
+            break;
+        }
+        Producto prod = entrada.sacaProducto();
+        System.out.println("Proceso " + prod.getMsg() + " recibio producto: "+prod.getMsg());
+        productosIni.add(prod);
+        System.out.println("Proceso Final: " + prod.getId());
+    }
 }
 public static CyclicBarrier getBarrier() {
     return barrera;
