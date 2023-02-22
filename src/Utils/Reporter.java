@@ -61,9 +61,21 @@ public class Reporter {
     }
 
     public synchronized void rBuzonFinalVacio() {
-        if(!lrBuzonFinalVacio) {
+        if (!lrBuzonFinalVacio) {
             report("El buzón final está vacio. Inicia espera para sacar el siguiente mensaje");
             lrBuzonFinalVacio = true;
+        }
+    }
+
+    public synchronized void rFinalPrintFail(int pId) {
+        if (!lrBuzonFinalVacio) {
+            report("El producto con id: " + pId + ",no se encuentra en buzon final para su impresion secuencial");
+        }
+    }
+
+    public synchronized void rFinalPrint(int pId, String msg) {
+        if (!lrBuzonFinalVacio) {
+            report("Impresion de producto (" + pId + ") con contenido : " + msg);
         }
     }
 

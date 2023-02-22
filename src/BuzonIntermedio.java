@@ -1,8 +1,9 @@
 public class BuzonIntermedio extends Buzon {
     private int nivel;
+
     public BuzonIntermedio(int tamano, int level) {
         super(tamano);
-        this.nivel=level;
+        this.nivel = level;
     }
 
     /**
@@ -13,8 +14,8 @@ public class BuzonIntermedio extends Buzon {
      */
     @Override
     public synchronized void recibeProductoA(Producto prod) {
-        while(cola.size() == tamano) {
-            Main.rep.rBuzonLleno(getId()+"", prod.getMsg());
+        while (cola.size() == tamano) {
+            Main.rep.rBuzonLleno(getId() + "", prod.getMsg());
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -31,11 +32,11 @@ public class BuzonIntermedio extends Buzon {
     }
 
     /**
-	 * Saca el producto en el tope de la cola y lo retorna
+     * Saca el producto en el tope de la cola y lo retorna
      * Si la cola no tiene mensajes hace wait().
      * Cuando saca el mensaje hace notify para despertar
      * a productores en espera.
-	 */
+     */
     @Override
     public synchronized Producto sacaProductoA() {
         while (cola.size() == 0) {
@@ -51,15 +52,18 @@ public class BuzonIntermedio extends Buzon {
     }
 
     @Override
-    public void recibeProductoN(Producto prod) {
+    public synchronized void recibeProductoN(Producto prod) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'recibeProductoN'");
+        cola.add(prod);
+        Main.rep.rprodAdded(getId(), prod.getMsg());
     }
 
     @Override
-    public Producto sacaProductoN() {
+    public synchronized Producto sacaProductoN() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sacaProductoN'");
+        Producto prod = cola.remove();
+        return prod;
+
     }
-    
+
 }

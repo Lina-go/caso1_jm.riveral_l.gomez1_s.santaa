@@ -3,7 +3,7 @@
  */
 public class BuzonInicial extends Buzon {
 
-    public BuzonInicial(int tamano){
+    public BuzonInicial(int tamano) {
         super(tamano);
     }
 
@@ -15,11 +15,11 @@ public class BuzonInicial extends Buzon {
         cola.add(prod);
         Main.rep.rprodAdded("inicial", prod.getMsg());
         notify();
-        }
+    }
 
     @Override
     public synchronized Producto sacaProductoA() {
-        while(cola.size() == 0) {
+        while (cola.size() == 0) {
             Main.rep.rBuzonVacio("inicial");
             try {
                 wait();
@@ -35,17 +35,22 @@ public class BuzonInicial extends Buzon {
     @Override
     public void recibeProductoN(Producto prod) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'recibeProductoN'");
+
     }
 
     @Override
     public Producto sacaProductoN() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sacaProductoN'");
+        while (cola.size() == 0) {
+            Main.rep.rBuzonVacio("inicial");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Producto x = cola.remove();
+        Main.rep.rProdRemoved("inicial", x.getMsg());
+        return x;
     }
-    
 
-    
-    
-    
 }
