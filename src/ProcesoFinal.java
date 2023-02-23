@@ -9,7 +9,8 @@ public class ProcesoFinal extends Thread {
         this.numProces = nProcesos;
         this.buzonS = buzonS;
     }
-    public void run(){
+
+    public void run() {
         for (int i = 0; i < numProces * numProd; i++) {
             Producto prod = buzonS.darProd(i);
             while (prod == null) {
@@ -17,6 +18,13 @@ public class ProcesoFinal extends Thread {
             }
             prod.transformar("/FINAL");
             System.out.println(prod.getMsg());
+            Main.rep.report("Print final Secuencial-Producto" + prod.getId() + ":" + prod.getMsg());
         }
+
+        Main.rep.report("Finalizó la ejecución del proceso final. Fin de la aplicación");
+
+        Main.rep.close();
+
     }
+
 }

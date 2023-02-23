@@ -14,15 +14,15 @@ public abstract class Buzon {
     protected Queue<Producto> productoNaranja = new LinkedList<Producto>();
     protected Queue<Producto> productoFinal = new LinkedList<Producto>();
 
-
     private synchronized boolean blueIsFull() {
-        if (isFinal){
+        if (isFinal) {
             return false;
         }
         return productoAzul.size() == this.tamano;
     }
+
     protected synchronized Producto sacaProducto() {
-		while (cola.isEmpty()) {
+        while (cola.isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -32,7 +32,7 @@ public abstract class Buzon {
         Producto prod = cola.remove();
         notifyAll();
         return prod;
-	}
+    }
 
     private synchronized boolean vacioA() {
         return productoAzul.isEmpty();
@@ -51,6 +51,7 @@ public abstract class Buzon {
     public synchronized Producto sacaA() {
 
         while (vacioA()) {
+            Main.rep.rBuzonVacio(getName());
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -64,8 +65,8 @@ public abstract class Buzon {
     }
 
     public synchronized void recibeA(Producto product) {
-
         while (blueIsFull()) {
+            Main.rep.rBuzonLleno(name, product.getId() + "");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -86,10 +87,11 @@ public abstract class Buzon {
     }
 
     public synchronized void recibeN(Producto product) {
-        if (!isFinal){
-            productoNaranja.add(product);}
-        else{
-            productoFinal.add(product);}
+        if (!isFinal) {
+            productoNaranja.add(product);
+        } else {
+            productoFinal.add(product);
+        }
     }
 
     public String getName() {
@@ -105,14 +107,16 @@ public abstract class Buzon {
         return null;
     }
 
-    public synchronized int getTamano(){
+    public synchronized int getTamano() {
         return tamano;
     }
+
     public int getCapacidad() {
         return tamano - cola.size();
     }
+
     protected synchronized void recibeProducto(Producto prod) {
-		while (cola.size() == tamano) {
+        while (cola.size() == tamano) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -121,5 +125,5 @@ public abstract class Buzon {
         }
         cola.add(prod);
         notifyAll();
-	}
+    }
 }

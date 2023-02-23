@@ -32,48 +32,40 @@ public class Reporter {
         }
     }
 
-    public synchronized void rSendAttempt(String id, String msg) {
-        report("El proceso " + id + " intentó enviar el mensaje " + msg);
+    public synchronized void rSendAttempt(String procesoId, String prodId) {
+        report("El proceso " + procesoId + " intentó enviar el Producto " + prodId);
     };
 
-    public synchronized void rMessageAdded(String id, String msg) {
-        report("El buzón " + id + " recibió el mensaje " + msg);
+    public synchronized void rProductoAdded(String buzonId, String productoId) {
+        report("El buzón " + buzonId + " recibió el Producto " + productoId);
     };
 
-    public synchronized void rRetriveAttempt(String id) {
-        report("El proceso " + id + " intentó recuperar un mensaje");
+    public synchronized void rRetriveAttempt(String procesoId) {
+        report("El proceso " + procesoId + " intentó recuperar un Producto");
     };
 
-    public synchronized void rMessageRemoved(String id, String msg) {
-        report("El buzón " + id + " entregó el mensaje " + msg);
+    public synchronized void rProductoRemoved(String buzonId, String productoId) {
+        report("El buzón " + buzonId + " entregó el Producto " + productoId);
     };
 
-    public synchronized void rBuzonLleno(String id, String msg) {
-        report("El buzón " + id + " está lleno. Inicia espera para añadir " + msg);
+    public synchronized void rBuzonLleno(String buzonId, String productoId) {
+        report("El buzón " + buzonId + " está lleno. Inicia espera para añadir Producto" + productoId);
     }
 
-    public synchronized void rBuzonVacio(String id) {
-        report("El buzón " + id + " está vacio. Inicia espera para sacar el siguiente mensaje");
+    public synchronized void rBuzonVacio(String buzonId) {
+        report("El buzón " + buzonId + " está vacio. Inicia espera para sacar el siguiente Producto");
     }
 
-    public synchronized void rEndOfExecution(String id) {
-        report("El proceso " + id + " recibió el mensaje 'FIN'. Finaliza su ejecución");
-    }
-
-    public synchronized void rBuzonFinalVacio() {
-        if(!lrBuzonFinalVacio) {
-            report("El buzón final está vacio. Inicia espera para sacar el siguiente mensaje");
-            lrBuzonFinalVacio = true;
-        }
+    public synchronized void rEndOfExecution(String procesoId) {
+        report("El proceso " + procesoId + " imprimio el ultimo Producto. Finaliza su ejecución");
     }
 
     public synchronized void report(String msg) {
-        lrBuzonFinalVacio = false;
         try {
             bw.newLine();
             bw.write(msg);
         } catch (IOException e) {
-            System.out.println("No fue posible escribir en el archivo de reporte de ejecución");
+            e.printStackTrace();
         }
     }
 
