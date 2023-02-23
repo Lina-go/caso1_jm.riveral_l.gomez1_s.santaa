@@ -1,5 +1,5 @@
 public class Producto {
-    private Integer id;
+    private int id;
     private String msg;
 
     public Producto() {
@@ -10,12 +10,12 @@ public class Producto {
         return id;
     }
 
-    public int setId(Integer id) {
+    public int setId(int id) {
         return this.id = id;
     }
 
-    public String transformar(String message) {
-        return this.msg += message;
+    public String transformar(String mensaje) {
+        return this.msg += mensaje;
     }
 
     public String getMsg() {

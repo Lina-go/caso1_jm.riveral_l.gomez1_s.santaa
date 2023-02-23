@@ -1,5 +1,5 @@
 public class Id {
-    private static volatile Id instance = null;
+    private static Id instance = null;
     private static Integer currentId = 0;
 
     private Id() {}

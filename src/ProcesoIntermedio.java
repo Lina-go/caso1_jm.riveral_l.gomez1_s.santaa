@@ -20,7 +20,6 @@ public void run(){
     if (tipo.equals("AZUL")){
         for (int i = 0; i < numProductos; i++) {
             Producto product = buzonE.sacaA();
-
             try {
                 Integer time = ThreadLocalRandom.current().nextInt(50, 501);
                 Thread.sleep(time);
@@ -34,10 +33,9 @@ public void run(){
         }
     }
     else{
-
         for (int i = 0; i < numProductos; i++) {
-            while (buzonE.vacioN())
-                Thread.yield();
+            while (buzonE.vacioN()){
+                Thread.yield();}
             Producto prod = buzonE.sacaN();
             synchronized (buzonE) {
                 buzonE.notifyAll();

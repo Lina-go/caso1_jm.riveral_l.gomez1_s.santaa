@@ -28,7 +28,7 @@ public class Main {
             Main.rep.report("Capacidad: " + capacidadB);
             capacidadB = in.nextInt();
         }
-
+        // Se crean los Buzones 
         BuzonIntermedio bI1 = new BuzonIntermedio(1, capacidadB);
         BuzonIntermedio bI2 = new BuzonIntermedio(2, capacidadB);
         BuzonFinal bF = new BuzonFinal(3);
