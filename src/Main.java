@@ -30,7 +30,7 @@ public class Main {
 
         }
         // Se crean los Buzones
-        BuzonIntermedio bI1 = new BuzonIntermedio(1, capacidadB);
+        BuzonInicial bI1 = new BuzonInicial(1, capacidadB);
         BuzonIntermedio bI2 = new BuzonIntermedio(2, capacidadB);
         BuzonFinal bF = new BuzonFinal(3);
         int azules = numProcedimientos - 1;
