@@ -14,7 +14,7 @@ public abstract class Buzon {
     protected Queue<Producto> productoNaranja = new LinkedList<Producto>();
     protected Queue<Producto> productoFinal = new LinkedList<Producto>();
 
-    private synchronized boolean llenoA() {
+    protected synchronized boolean llenoA() {
         if (esFinal) {
             return false;
         }
@@ -34,22 +34,22 @@ public abstract class Buzon {
         return prod;
     }
 
-    private synchronized boolean vacioA() {
+    protected synchronized boolean vacioA() {
         return productoAzul.isEmpty();
     }
 
-    public synchronized boolean llenoN() {
+    protected synchronized boolean llenoN() {
         if (esFinal){
             return false;
         }
         return productoNaranja.size() == this.tamano;
     }
 
-    public synchronized boolean vacioN() {
+    protected synchronized boolean vacioN() {
         return productoNaranja.isEmpty();
     }
 
-    public synchronized Producto sacaA() {
+    protected synchronized Producto sacaA() {
 
         while (vacioA()) {
             Main.rep.rBuzonVacio(getName());
@@ -65,7 +65,7 @@ public abstract class Buzon {
         return sentProduct;
     }
 
-    public synchronized void recibeA(Producto product) {
+    protected synchronized void recibeA(Producto product) {
         while (llenoA()) {
             Main.rep.rBuzonLleno(name, product.getId() + "");
             try {
@@ -82,12 +82,12 @@ public abstract class Buzon {
         notifyAll();
     }
 
-    public synchronized Producto sacaN() {
+    protected synchronized Producto sacaN() {
 
         return productoNaranja.remove();
     }
 
-    public synchronized void recibeN(Producto product) {
+    protected synchronized void recibeN(Producto product) {
         if (!esFinal) {
             productoNaranja.add(product);
         } else {
@@ -99,7 +99,7 @@ public abstract class Buzon {
         return name;
     }
 
-    public synchronized Producto darProd(Integer id) {
+    protected synchronized Producto darProd(Integer id) {
         for (Producto product : productoFinal) {
             if (Objects.equals(product.getId(), id)) {
                 return product;
@@ -108,11 +108,11 @@ public abstract class Buzon {
         return null;
     }
 
-    public synchronized int getTamano() {
+    protected synchronized int getTamano() {
         return tamano;
     }
 
-    public int getCapacidad() {
+    protected int getCapacidad() {
         return tamano - cola.size();
     }
 
