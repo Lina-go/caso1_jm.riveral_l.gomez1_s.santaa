@@ -1,26 +1,22 @@
-public class ProcesoFinal extends Thread{
-    private  Buzon entrada;
-    private int numProd;
-    private int numProceso;
-    
-public ProcesoFinal(Buzon buzonE, int numProductos, int numProcedimientos){
-    this.entrada=buzonE;
-    this.numProd=numProductos;
-    this.numProceso=numProcedimientos;
-}
+public class ProcesoFinal extends Thread {
 
+    private Integer numProd;
+    private Integer numProces;
+    private Buzon buzonS;
 
-@Override
-public void run(){
-    Integer i = 0;
-    while (i < numProd* numProceso) {
-        Producto producto = entrada.giveProduct(i);
-        while (producto == null) {
-            producto = entrada.giveProduct(i);
-        }
-        producto.transformar("FIN");
-        System.out.println(producto.getMsg());
-        i++;
+    public ProcesoFinal(Integer nProcesos, Integer nProductos, Buzon buzonS) {
+        this.numProd = nProductos;
+        this.numProces = nProcesos;
+        this.buzonS = buzonS;
     }
-}
+    public void run(){
+        for (int i = 0; i < numProces * numProd; i++) {
+            Producto prod = buzonS.darProd(i);
+            while (prod == null) {
+                prod = buzonS.darProd(i);
+            }
+            prod.transformar("/FINAL");
+            System.out.println(prod.getMsg());
+        }
+    }
 }

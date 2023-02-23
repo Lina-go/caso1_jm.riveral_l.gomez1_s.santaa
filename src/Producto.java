@@ -1,29 +1,25 @@
 public class Producto {
-
-    private int id;
+    private Integer id;
     private String msg;
-    private boolean color;
 
-    public Producto(int pId) {
-        this.id=pId;
-        this.msg=pId+"";
+    public Producto() {
+        this.msg = "";
     }
-    
-    public int getId() {
-        return this.id;
-        
+
+    public Integer getId() {
+        return id;
     }
+
+    public int setId(Integer id) {
+        return this.id = id;
+    }
+
+    public String transformar(String message) {
+        return this.msg += message;
+    }
+
     public String getMsg() {
-        return this.msg;
-        
-    }
-    public Boolean getTipo() {
-        return this.color;
-        
+        return msg;
     }
 
-    public synchronized void transformar(String nStr) {
-        msg+=nStr;
-        
-    }
 }

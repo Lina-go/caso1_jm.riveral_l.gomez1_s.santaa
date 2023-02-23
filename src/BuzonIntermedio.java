@@ -1,7 +1,7 @@
 public class BuzonIntermedio extends Buzon {
-    
-    public BuzonIntermedio(int tam) {
-        super.tamano = tam;
+    public BuzonIntermedio(int number, int capacity) {
+        super.tamano = capacity;
+        super.name = "Buzón Intermedio " + number;
         super.isFinal = false;
     }
 }

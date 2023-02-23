@@ -1,50 +1,27 @@
-/**
- * Buzon
- */
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Objects;
 
 public abstract class Buzon {
 
-    protected int tamano; //tamaño buzon
-	protected boolean isFinal; //Ultimo buzon
+    protected int tamano;
+    protected String name;
+    protected boolean isFinal;
 
-	protected Queue<Producto> cola = new LinkedList<Producto>(); //colaBuzón
-	protected Queue<Producto> blueProducts = new LinkedList<Producto>();
-    protected Queue<Producto> orangeProducts = new LinkedList<Producto>();
-    protected LinkedList<Producto> finalProducts = new LinkedList<Producto>();
+    // Colas
+    protected Queue<Producto> cola = new LinkedList<Producto>();
+    protected Queue<Producto> productoAzul = new LinkedList<Producto>();
+    protected Queue<Producto> productoNaranja = new LinkedList<Producto>();
+    protected Queue<Producto> productoFinal = new LinkedList<Producto>();
 
 
-
-
-
-    /**
-	 * Añade un mensaje a la cola de mensajes del Buzón 
-     * @throws InterruptedException
-	 */
-
-	protected synchronized void recibeProducto(Producto prod) {
-		while (cola.size() == tamano) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private synchronized boolean blueIsFull() {
+        if (isFinal){
+            return false;
         }
-        cola.add(prod);
-        notifyAll();
-	}
-    //get tamaño del buzon
-    public synchronized int getTamano(){
-        return tamano;
+        return productoAzul.size() == this.tamano;
     }
-	
-	/**
-	 * Saca el mensaje en el tope de la cola y lo retorna
-	 * @throws InterruptedException
-	 */
-	protected synchronized Producto sacaProducto() {
+    protected synchronized Producto sacaProducto() {
 		while (cola.isEmpty()) {
             try {
                 wait();
@@ -57,38 +34,38 @@ public abstract class Buzon {
         return prod;
 	}
 
-	public synchronized int getCapacidad() {
-		return tamano - cola.size();
-	}
+    private synchronized boolean vacioA() {
+        return productoAzul.isEmpty();
+    }
 
-	/**
-	 * Retorna la cantidad actual de mensajes en la cola
-	 */
-	public synchronized int getOcupacion() {
-		return cola.size();
-	}
-	protected synchronized boolean colaIsFull() {
+    public synchronized boolean llenoN() {
         if (isFinal)
             return false;
-        return this.cola.size() == this.tamano;
+        return productoNaranja.size() == this.tamano;
     }
 
-	protected synchronized boolean colaIsEmpty() {
-        return this.cola.isEmpty();
-    }
-	//////////////////////////// PRODUCTO AZUL /////////////////////////////////
-	protected synchronized boolean blueIsFull() {
-        if (isFinal)
-            return false;
-        return this.blueProducts.size() == this.tamano;
+    public synchronized boolean vacioN() {
+        return productoNaranja.isEmpty();
     }
 
-	protected synchronized boolean blueIsEmpty() {
-        return this.blueProducts.isEmpty();
+    public synchronized Producto sacaA() {
+
+        while (vacioA()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Producto sentProduct = productoAzul.remove();
+        notifyAll();
+        return sentProduct;
     }
 
-	protected synchronized void recibeProductoA(Producto prod) {
-		while (blueIsFull()) {
+    public synchronized void recibeA(Producto product) {
+
+        while (blueIsFull()) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -97,76 +74,52 @@ public abstract class Buzon {
         }
 
         if (!isFinal)
-            blueProducts.add(prod);
-        else{
-            finalProducts.add(prod);}
-
+            productoAzul.add(product);
+        else
+            productoFinal.add(product);
         notifyAll();
-	}
-	
-	/**
-	 * Saca el mensaje en el tope de la cola y lo retorna
-	 */
-	protected synchronized Producto sacaProductoA(){
-		while (blueIsEmpty()) {
+    }
+
+    public synchronized Producto sacaN() {
+
+        return productoNaranja.remove();
+    }
+
+    public synchronized void recibeN(Producto product) {
+        if (!isFinal){
+            productoNaranja.add(product);}
+        else{
+            productoFinal.add(product);}
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public synchronized Producto darProd(Integer id) {
+        for (Producto product : productoFinal) {
+            if (Objects.equals(product.getId(), id)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public synchronized int getTamano(){
+        return tamano;
+    }
+    public int getCapacidad() {
+        return tamano - cola.size();
+    }
+    protected synchronized void recibeProducto(Producto prod) {
+		while (cola.size() == tamano) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-        Producto sentProduct = blueProducts.remove();
-
+        cola.add(prod);
         notifyAll();
-
-        return sentProduct;
 	}
-
-	//////////////////////////// PRODUCTO NARANJA /////////////////////////////////
-	protected synchronized boolean orangeIsFull() {
-        if (isFinal)
-            return false;
-        return this.orangeProducts.size() == this.tamano;
-    }
-
-    protected synchronized boolean orangeIsEmpty() {
-        return this.orangeProducts.isEmpty();
-    }
-	protected synchronized void recibeProductoN(Producto prod){
-		if (!isFinal)
-        {System.out.println("PAPITASSS");
-            orangeProducts.add(prod);}
-        else{
-            System.out.println("Añadiendo producto final");
-            finalProducts.add(prod);}
-	}
-    
-    // get lista de finalProducts
-    public synchronized List<Producto> getFinalProducts() {
-        return finalProducts;
-    }
-	
-	/**
-	 * Saca el mensaje en el tope de la cola y lo retorna
-	 */
-	protected synchronized Producto sacaProductoN(){
-		return orangeProducts.remove();
-    }
-
-    public synchronized Producto giveProduct(Integer id) {
-        for (Producto product : finalProducts) {
-            if (product.getId() == id) {
-                return product;
-            }
-        }
-        return null;
-    }
-    public synchronized void setFinal() {
-        isFinal = true;
-    }
-    // get final
-    public synchronized boolean getFinal() {
-        return isFinal;
-    }
 }
