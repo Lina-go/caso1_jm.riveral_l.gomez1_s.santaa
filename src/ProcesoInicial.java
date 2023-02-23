@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,36 +6,43 @@ import java.util.Queue;
  */
 public class ProcesoInicial extends Thread {
 
-    private Buzon BuzonS;
+    private Buzon buzonS;
     private Queue<Producto> productosIni = new LinkedList<Producto>();
     
     public ProcesoInicial(Buzon BuzonSalida, Queue<Producto> productosInicio){
-        this.BuzonS=BuzonSalida;
+        this.buzonS=BuzonSalida;
         this.productosIni=productosInicio;
 
     }
     
-    public synchronized void cargaInicial(){
-
-        while(productosIni.size()!=0){
-            if(BuzonS.getCapacidad()==0){
+    public synchronized void cargaInicial() {
+        if (buzonS.getTamano()==0)
+            System.out.println("No se puede iniciar si la capacidad es 0!!!");
+    
+        while(!productosIni.isEmpty()){
+            if(buzonS.getCapacidad()==0){
                 try {
                     wait();
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
             
-            BuzonS.recibeProducto(productosIni.remove());
-            notify();
+            buzonS.recibeProducto(productosIni.remove());
+            notifyAll();
         }
     }
 
+    @Override
     public void run(){
         System.out.println("Proceso Inicial Iniciado");
-        cargaInicial();
-        System.out.println("Proceso Inicial terminado");
+        
+            try {
+                cargaInicial();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        System.out.println("-----------------------------ETAPA 1 terminada -------------------------------------");
 
     }
 }

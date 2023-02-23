@@ -3,29 +3,37 @@
  */
 public class BuzonInicial extends Buzon {
 
-    public BuzonInicial(int tamano){
-        super(tamano);
+    public BuzonInicial(int tam){
+        super.tamano = tam;
+        super.isFinal = false;
     }
 
     @Override
     public synchronized void recibeProducto(Producto prod) {
-        throw new UnsupportedOperationException("No se puede poner producto en el buzon inicial");
-        
+        while (cola.size() == tamano) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Buzon Inicial recibe producto: "+prod.getId()+"\n");
+        cola.add(prod);
+        notifyAll();
     }
 
     @Override
     public synchronized Producto sacaProducto() {
-        while(cola.size() ==0){
+        while(cola.isEmpty()){
             try {
                 wait();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
         }
         Producto prod = cola.remove();
-        notify();
+        notifyAll();
         return prod;
 
     }
