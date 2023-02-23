@@ -9,7 +9,7 @@ public class BuzonInicial extends Buzon {
 
     @Override
     public synchronized void recibeProductoA(Producto prod) {
-        if (cola.size() == tamano) {
+        while (cola.size() == tamano) {
             System.out.println("Se intentó agregar un producto cuando el buzon inicial estaba lleno");
         }
         cola.add(prod);

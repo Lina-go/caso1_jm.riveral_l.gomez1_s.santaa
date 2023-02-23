@@ -3,8 +3,7 @@
  * Main
  */
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
 import java.util.Scanner;
 import Utils.Reporter;
 
@@ -13,8 +12,7 @@ public class Main {
     private static int numProductos = 0;
     private static int numProcedimientos = 0;
     private static int capacidadB = 0;
-    private static Queue<Producto> productosCreados = new LinkedList<Producto>();
-    private static Queue<Producto> productosTransformados = new LinkedList<Producto>();
+    private static ArrayList<Producto> productosCreados = new ArrayList<Producto>();
     private static int azules = 0;
     public static final Reporter rep = new Reporter("ExecReport " + LocalDateTime.now().toString());
 
@@ -25,18 +23,19 @@ public class Main {
         // Consola: Se le piden al usuario params(productos,procesos,capacidad)
         System.out.println("Numero de Productos:");
         numProductos = in.nextInt();
-        System.out.println("Numero de Productos: " + numProductos);
+        Main.rep.report("Numero de Productos: " + numProductos);
 
         System.out.println("Numero de Procesos:");
         numProcedimientos = in.nextInt();
-        System.out.println("Numero de Procesos: " + numProcedimientos);
+        Main.rep.report("Numero de Procesos: " + numProcedimientos);
 
         System.out.println("Capacidad de Buzones:");
         capacidadB = in.nextInt();
-        System.out.println("Capacidad: " + capacidadB);
+        Main.rep.report("Capacidad: " + capacidadB);
 
         azules = numProcedimientos - 1;
         System.out.println("\nHay " + azules + " procesos azules y 1 proceso naranja por nivel\n");
+        Main.rep.report("\nHay " + azules + " procesos azules y 1 proceso naranja por nivel\n");
 
         // crea productos
         for (int i = 0; i < numProductos; i++) {
@@ -48,7 +47,7 @@ public class Main {
         BuzonInicial bInicio = new BuzonInicial(capacidadB);
         BuzonIntermedio bI1 = new BuzonIntermedio(capacidadB, 1);
         BuzonIntermedio bI2 = new BuzonIntermedio(capacidadB, 2);
-        BuzonFinal bFinalInf = new BuzonFinal(3);
+        BuzonFinal bFinalInf = new BuzonFinal(Integer.MAX_VALUE);
         Buzon[] buzones = { bInicio, bI1, bI2, bFinalInf };
 
         System.out.println("buzones creados exitosamente");

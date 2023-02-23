@@ -8,18 +8,18 @@ import java.util.Queue;
 public class ProcesoInicial extends Thread {
 
     private Buzon buzonS;
-    private Queue<Producto> productosIni = new LinkedList<Producto>();
+    private ArrayList<Producto> productosIni = new ArrayList<Producto>();
+    private int index = 0;
 
-    public ProcesoInicial(Buzon BuzonSalida, Queue<Producto> productosInicio) {
+    public ProcesoInicial(Buzon BuzonSalida, ArrayList<Producto> productosInicio) {
         this.buzonS = BuzonSalida;
         this.productosIni = productosInicio;
 
     }
 
     public void run() {
-        for (int i = 0; i < productosIni.size(); i++) {
-            Producto x = productosIni.remove();
-
+        while (index < productosIni.size()) {
+            Producto x = productosIni.get(index);
             while (buzonS.getCapacidad() == 0) {
 
                 Main.rep.rBuzonLleno("inicial", x.getMsg());
@@ -27,6 +27,7 @@ public class ProcesoInicial extends Thread {
             }
             buzonS.recibeProductoA(x);
             buzonS.setContador();
+            index++;
 
         }
         Main.rep.report("El proceo inicial envió todos los mensajes. Finaliza su ejecución");

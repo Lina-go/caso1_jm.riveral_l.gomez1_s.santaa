@@ -8,8 +8,7 @@ public class BuzonFinal extends Buzon {
     private ArrayList<Producto> listaFin;
 
     public BuzonFinal(int i) {
-        super(tamano);
-        tamano = Integer.MAX_VALUE;
+        super(i);
         nivel = i;
         listaFin = new ArrayList<Producto>();
     }
