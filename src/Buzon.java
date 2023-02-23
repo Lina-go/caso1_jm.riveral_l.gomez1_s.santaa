@@ -6,7 +6,7 @@ public abstract class Buzon {
 
     protected int tamano;
     protected String name;
-    protected boolean isFinal;
+    protected boolean esFinal;
 
     // Colas
     protected Queue<Producto> cola = new LinkedList<Producto>();
@@ -14,8 +14,8 @@ public abstract class Buzon {
     protected Queue<Producto> productoNaranja = new LinkedList<Producto>();
     protected Queue<Producto> productoFinal = new LinkedList<Producto>();
 
-    private synchronized boolean blueIsFull() {
-        if (isFinal) {
+    private synchronized boolean llenoA() {
+        if (esFinal) {
             return false;
         }
         return productoAzul.size() == this.tamano;
@@ -39,8 +39,9 @@ public abstract class Buzon {
     }
 
     public synchronized boolean llenoN() {
-        if (isFinal)
+        if (esFinal){
             return false;
+        }
         return productoNaranja.size() == this.tamano;
     }
 
@@ -65,7 +66,7 @@ public abstract class Buzon {
     }
 
     public synchronized void recibeA(Producto product) {
-        while (blueIsFull()) {
+        while (llenoA()) {
             Main.rep.rBuzonLleno(name, product.getId() + "");
             try {
                 wait();
@@ -74,10 +75,10 @@ public abstract class Buzon {
             }
         }
 
-        if (!isFinal)
-            productoAzul.add(product);
-        else
-            productoFinal.add(product);
+        if (!esFinal){
+            productoAzul.add(product);}
+        else{
+            productoFinal.add(product);}
         notifyAll();
     }
 
@@ -87,7 +88,7 @@ public abstract class Buzon {
     }
 
     public synchronized void recibeN(Producto product) {
-        if (!isFinal) {
+        if (!esFinal) {
             productoNaranja.add(product);
         } else {
             productoFinal.add(product);
