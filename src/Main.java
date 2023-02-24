@@ -27,6 +27,11 @@ public class Main {
             System.out.println("Capacidad de Buzones:");
             capacidadB = in.nextInt();
             Main.rep.report("Capacidad: " + capacidadB);
+            if (capacidadB < 1) {
+                System.out.println(
+                        "La capacidad dada no es valida, esta debe ser mayor o igual a 1.Se va a terminar la ejecucion, intente nuevamente");
+                System.exit(1);
+            }
 
         }
         // Se crean los Buzones
